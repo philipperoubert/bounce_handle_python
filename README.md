@@ -36,10 +36,10 @@ Make sure to save that, don't forget to add it to your `urls.py` file, I persona
 
 
 ### b: Send a subscription url
-Once this is done, we then need to confirm the subscription. Amazon will send you a subscription link as a request to your new url, when clicking on it, amazon will confirm the subscription. To do that you need to go to your new SNS topic and click on "create subscription", select the protocol, in my case I will use HTTP, and in endpoint, you need to put in the bounce_handler full url. Once you've done this, click on request confirmation, this should send a request to your bounce_handler view, which will then confirm the subscription. Wait a bit and you should see that the subscription has been confirmed under status.
+Once this is done, we then need to confirm the subscription. Amazon will send you a subscription link as a request to your new url, when clicking on it, amazon will confirm the subscription. To do that you need to go to your new SNS topic and click on "create subscription", select the protocol, in my case I will use HTTPS as I have set up HTTPS for my website, use HTTP if your website doesn't have HTTPS, and in endpoint, you need to put in the bounce_handler full url. Once you've done this, it should confirm automatically. Otherwise, make sure the code is like above, redeploy, and click on request confirmation in your topic, this should send a request to your bounce_handler view, which will then confirm the subscription. Wait a bit and you should see that the subscription has been confirmed under status.
 
 ## Step 3: Handling Bounces and Complaints
-Great! We are almost done, go back to your `views.py` file and change the code that we wrote earlier and put in your own code. Below is an example, it doesn't do anything except assigning variables, it's just to show you what the json format would look like.
+Great! We are almost done, go back to your `views.py` file and change the code that we wrote earlier and put in your own code. Below is an example, it doesn't do anything except assigning variables, it's just to show you that you can use these variables for whatever you want and to show you what the json format would look like.
 
 ```
 from django.http import JsonResponse

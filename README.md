@@ -15,6 +15,8 @@ Furthermore __it's an SES requirement to handle these bounces and complaints.__
  
 Go to Amazon Simple Notification Service (SNS) and create a topic, call it whatever you want, I used the name of my domain underscore topic (domain_topic). You can leave out all other options as default.
 
+![Create topic](/assets/1.png)
+
 ## Step 2: Subscribe to the topic
 ### a: Set up a view
 Now we need to have a way for our AWS notification to arrive to us and to subscribe to the topic. In my case I used Django as I find it easier to set up, but if you find a way to receive these requests in python, then go ahead and skip the first part. I will explain how to do it with Django.
@@ -32,11 +34,14 @@ def bounce_handler(request):
          
     return JsonResponse({})
 ```
-Make sure to save that, don't forget to add it to your `urls.py` file, I personally gave my bounce_handler view the bounce url. Finally, deploy your website.
+Make sure to save that, don't forget to add it to your `urls.py` file, I personally gave my bounce_handler view the /bounce_handler url. Finally, deploy your website.
 
 
 ### b: Send a subscription url
-Once this is done, we then need to confirm the subscription. Amazon will send you a subscription link as a request to your new url, when clicking on it, amazon will confirm the subscription. To do that you need to go to your new SNS topic and click on "create subscription", select the protocol, in my case I will use HTTPS as I have set up HTTPS for my website, use HTTP if your website doesn't have HTTPS, and in endpoint, you need to put in the bounce_handler full url. Once you've done this, it should confirm automatically. Otherwise, make sure the code is like above, redeploy, and click on request confirmation in your topic, this should send a request to your bounce_handler view, which will then confirm the subscription. Wait a bit and you should see that the subscription has been confirmed under status.
+Once this is done, we then need to confirm the subscription. Amazon will send you a subscription link as a request to your new url, when clicking on it, amazon will confirm the subscription. To do that you need to go to your new SNS topic and click on "create subscription", select the protocol, in my case I will use HTTPS as I have set up HTTPS for my website, use HTTP if your website doesn't have HTTPS, and in endpoint, you need to put in the bounce_handler full url. 
+![Create Subscription](/assets/2.jpg)
+Once you've done this, it should confirm automatically. Otherwise, make sure the code is like above, redeploy, and click on request confirmation in your topic, this should send a request to your bounce_handler view, which will then confirm the subscription. Wait a bit and you should see that the subscription has been confirmed under status.
+![Confirm Subscription](/assets/3.jpg)
 
 ## Step 3: Handling Bounces and Complaints
 Great! We are almost done, go back to your `views.py` file and change the code that we wrote earlier and put in your own code. Below is an example, it doesn't do anything except assigning variables, it's just to show you that you can use these variables for whatever you want and to show you what the json format would look like.
@@ -61,8 +66,10 @@ def bounce_handler(request):
     return JsonResponse({})
 ```
 
-And there you go! You can now handle bounces and complaints, all we need to do now is go back to our SES dashboard. Go to domains, click the domain you want to send emails with, under notifications click 'edit configuration', and under 'bounces' and 'complaints' select your topic you created ealier.
+You can now handle bounces and complaints, all we need to do now is go back to our SES dashboard. Go to domains, click the domain you want to send emails with, under notifications click 'edit configuration', and under 'bounces' and 'complaints' select your topic you created ealier.
+![Select topic in configuration](/assets/4.png)
 
 And that's it! Any bounces or complaints will be sent to your bounce url.
 
 If you want to test it, use `bounce@simulator.amazonses.com`, this email will automatically bounce any email you send it to.
+![Send test email](/assets/5.jpg)

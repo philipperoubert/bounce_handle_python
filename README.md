@@ -38,9 +38,12 @@ Make sure to save that, don't forget to add it to your `urls.py` file, I persona
 
 
 ### b: Send a subscription url
-Once this is done, we then need to confirm the subscription. Amazon will send you a subscription link as a request to your new url, when clicking on it, amazon will confirm the subscription. To do that you need to go to your new SNS topic and click on "create subscription", select the protocol, in my case I will use HTTPS as I have set up HTTPS for my website, use HTTP if your website doesn't have HTTPS, and in endpoint, you need to put in the bounce_handler full url. 
+Once this is done, we then need to confirm the subscription. Amazon will send you a subscription link as a request to your new url, when clicking on it, amazon will confirm the subscription. To do that you need to go to your new SNS topic and click on "create subscription", select the protocol, in my case I will use HTTPS as I have set up HTTPS for my website, use HTTP if your website doesn't have HTTPS, and in endpoint, you need to put in the bounce_handler full url.
+
 ![Create Subscription](/assets/2.jpg)
+
 Once you've done this, it should confirm automatically. Otherwise, make sure the code is like above, redeploy, and click on request confirmation in your topic, this should send a request to your bounce_handler view, which will then confirm the subscription. Wait a bit and you should see that the subscription has been confirmed under status.
+
 ![Confirm Subscription](/assets/3.jpg)
 
 ## Step 3: Handling Bounces and Complaints
@@ -67,9 +70,11 @@ def bounce_handler(request):
 ```
 
 You can now handle bounces and complaints, all we need to do now is go back to our SES dashboard. Go to domains, click the domain you want to send emails with, under notifications click 'edit configuration', and under 'bounces' and 'complaints' select your topic you created ealier.
+
 ![Select topic in configuration](/assets/4.png)
 
 And that's it! Any bounces or complaints will be sent to your bounce url.
 
 If you want to test it, use `bounce@simulator.amazonses.com`, this email will automatically bounce any email you send it to.
+
 ![Send test email](/assets/5.jpg)

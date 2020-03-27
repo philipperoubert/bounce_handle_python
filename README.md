@@ -27,9 +27,9 @@ import json
 
 def bounce_handler(request):
     if request.body.decode("utf-8"):
-         urllib.request.urlopen(urljson.loads(request.body)['SubscribeURL']) # Confirms subscription
+         urllib.request.urlopen(json.loads(request.body)['SubscribeURL']) # Confirms subscription
          
-    return JsonResponse(data)
+    return JsonResponse({})
 ```
 Make sure to save that, don't forget to add it to your `urls.py` file, I personally gave my bounce_handler view the bounce url. Finally, deploy your website.
 
@@ -46,16 +46,16 @@ import json
 
 def bounce_handler(request):
     if request.body.decode("utf-8"):
-         # Do something with the data
-         message = json.loads(json.loads(request.body)['Message'])
-         notification_type = message['notificationType']
-         recipients = message['bounce']['bouncedRecipients']
-         for recipient in recipients:
-             email_address = recipient['emailAddress']
-             action = recipient['action'] # e.g. 'failed'
-         from_email = message['mail']['source']
-         timestamp = message['mail']['timestamp']
-         
+        # Do something with the data
+        message = json.loads(json.loads(request.body)['Message'])
+        notification_type = message['notificationType']
+        recipients = message['bounce']['bouncedRecipients']
+        for recipient in recipients:
+            email_address = recipient['emailAddress']
+            action = recipient['action'] # e.g. 'failed'
+        from_email = message['mail']['source']
+        timestamp = message['mail']['timestamp']
+        
     return JsonResponse({})
 ```
 

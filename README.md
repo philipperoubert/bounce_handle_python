@@ -25,6 +25,7 @@ from django.http import JsonResponse
 import urllib.request
 import json
 
+@csrf_exempt
 def bounce_handler(request):
     if request.body.decode("utf-8"):
          urllib.request.urlopen(json.loads(request.body)['SubscribeURL']) # Confirms subscription
@@ -44,6 +45,7 @@ Great! We are almost done, go back to your `views.py` file and change the code t
 from django.http import JsonResponse
 import json
 
+@csrf_exempt
 def bounce_handler(request):
     if request.body.decode("utf-8"):
         # Do something with the data
